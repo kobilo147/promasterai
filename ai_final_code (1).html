@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Matches Elite AI v3.9</title>
+  <!-- Link to CSS -->
+  <link rel="stylesheet" href="style.css" />
+  <!-- Chart.js Library -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- ================= LOGIN PAGE ================= -->
+  <div id="loginSection" class="login-wrapper">
+    <div class="login-container">
+      <div class="login-header">
+        <h1>MATCHES ELITE</h1>
+        <p>Premium Deriv Analysis System v3.9</p>
+        <div class="price-tag">LICENSE: $2,560 USD</div>
+      </div>
+      
+      <div class="input-group">
+        <label>Username</label>
+        <input type="text" id="usernameInput" placeholder="Enter Username" autocomplete="off">
+      </div>
+      
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" id="passwordInput" placeholder="Enter Password">
+      </div>
+
+      <div id="loginError" class="login-error">Invalid Credentials</div>
+
+      <button id="loginBtn" class="login-btn">ACCESS TERMINAL</button>
+      <button id="waBtn" class="wa-btn">GET LOGINS (WhatsApp)</button>
+    </div>
+  </div>
+
+  <!-- ================= MAIN APP ================= -->
+  <div id="appInterface" style="display: none;">
+
+    <!-- Matrix / Startup Overlay -->
+    <div id="startupOverlay" class="startup-overlay" style="display: none;">
+      <canvas id="matrixCanvas"></canvas>
+      <div class="startup-content">
+        <div class="hacker-text">INITIALIZING NEURAL NETWORK...</div>
+        <div class="hacker-subtext">COLLECTING TICKS: <span id="tickCounter">0</span>/<span id="startTarget">50</span></div>
+        <div class="big-countdown" id="startupTimer">50</div>
+        <div class="code-stream">ESTABLISHING_CONNECTION...</div>
+      </div>
+    </div>
+
+    <div class="container" id="mainContainer">
+      <div class="header">
+        <!-- Status Lights -->
+        <div class="indicator-panel">
+          <div id="ledGreen" class="led-light"></div>
+          <div id="ledRed" class="led-light active-red"></div>
+        </div>
+
+        <h1><span class="highlight">Matches</span> Elite</h1>
+        
+        <button id="logoutBtn" class="logout-btn">Logout</button>
+        <button class="connector-btn">Deriv Connector</button>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls">
+        <div class="control-group">
+          <span class="control-label">ASSET</span>
+          <select id="volatilitySelect" class="dropdown">
+            <optgroup label="1-Second Indices (Fast)">
+              <option value="1HZ10V" selected>Vol 10 (1s)</option>
+              <option value="1HZ15V">Vol 15 (1s)</option>
+              <option value="1HZ25V">Vol 25 (1s)</option>
+              <option value="1HZ30V">Vol 30 (1s)</option>
+              <option value="1HZ50V">Vol 50 (1s)</option>
+              <option value="1HZ75V">Vol 75 (1s)</option>
+              <option value="1HZ90V">Vol 90 (1s)</option>
+              <option value="1HZ100V">Vol 100 (1s)</option>
+            </optgroup>
+            <optgroup label="Standard Indices (Slow)">
+              <option value="R_10">Volatility 10</option>
+              <option value="R_25">Volatility 25</option>
+              <option value="R_50">Volatility 50</option>
+              <option value="R_75">Volatility 75</option>
+              <option value="R_100">Volatility 100</option>
+            </optgroup>
+          </select>
+        </div>
+        
+        <div class="tick-group">
+          <span class="control-label">TICKS</span>
+          <input type="number" id="tickCountInput" class="tick-input" value="50" min="10" max="1000">
+        </div>
+      </div>
+
+      <div class="live-price">
+        <div id="selectedIndex">Volatility 10 (1s) Index</div>
+        <div id="livePrice">----</div>
+        <div id="hexStream" class="hex-stream">00 00 00 00 00</div>
+      </div>
+
+      <button id="toggleBtn" class="stop-btn">Start Analysis</button>
+
+      <!-- Digits Stream (Big Blocks) -->
+      <div class="digits-container">
+        <div class="digits-group">
+          <h3 class="digit-title">Live Digit Stats</h3>
+          
+          <div class="digits-row">
+            <div class="digit-box"><div class="digit" id="digit0">0</div><div class="d-pct" id="pct0">0%</div></div>
+            <div class="digit-box"><div class="digit" id="digit1">1</div><div class="d-pct" id="pct1">0%</div></div>
+            <div class="digit-box"><div class="digit" id="digit2">2</div><div class="d-pct" id="pct2">0%</div></div>
+            <div class="digit-box"><div class="digit" id="digit3">3</div><div class="d-pct" id="pct3">0%</div></div>
+            <div class="digit-box"><div class="digit" id="digit4">4</div><div class="d-pct" id="pct4">0%</div></div>
+          </div>
+          
+          <div class="digits-row">
+            <div class="digit-box"><div class="digit" id="digit5">5</div><div class="d-pct" id="pct5">0%</div></div>
+            <div class="digit-box"><div class="digit" id="digit6">6</div><div class="d-pct" id="pct6">0%</div></div>
+            <div class="digit-box"><div class="digit" id="digit7">7</div><div class="d-pct" id="pct7">0%</div></div>
+            <div class="digit-box"><div class="digit" id="digit8">8</div><div class="d-pct" id="pct8">0%</div></div>
+            <div class="digit-box"><div class="digit" id="digit9">9</div><div class="d-pct" id="pct9">0%</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button id="overUnderBtn" class="action-btn overunder-btn">Scan Over/Under</button>
+        <div id="overunderSignal" class="signal-box"></div>
+
+        <button id="evenOddBtn" class="action-btn evenodd-btn">Scan Even/Odd</button>
+        <div id="evenoddSignal" class="signal-box"></div>
+      </div>
+
+      <!-- Matches / Differs STRIP -->
+      <div class="md-strip">
+        <button id="matchesBtn" class="md-btn matches-color">SCAN MATCH</button>
+
+        <div class="digit-orb">
+          <div class="orb-glow"></div>
+          <div id="predictedDigit">–</div>
+        </div>
+
+        <button id="differsBtn" class="md-btn differs-color">SCAN DIFFER</button>
+      </div>
+
+      <!-- Confidence Bar -->
+      <div class="confidence-section" id="confidenceSection" style="opacity: 0;">
+        <div class="conf-header">
+          <span class="conf-title">AI Confidence</span>
+          <span id="confValue" class="conf-percent">0%</span>
+        </div>
+        <div class="conf-track">
+          <div id="confBar" class="conf-fill" style="width: 0%"></div>
+        </div>
+        <div id="confMessage" class="conf-msg">Waiting for prediction...</div>
+      </div>
+
+      <div class="chart-section">
+        <h3>Hot Numbers (Frequency)</h3>
+        <canvas id="freqChart"></canvas>
+        <div class="last-digit">Last Digit: <span id="lastDigit">-</span></div>
+      </div>
+
+      <!-- Hacker Terminal -->
+      <div class="terminal-section">
+        <div class="terminal-header">
+          <span>:: SYSTEM_KERNEL_LOG ::</span>
+          <span class="blink">_</span>
+        </div>
+        <div id="terminalOutput" class="terminal-body">
+          <div class="log-line">> SYSTEM_READY...</div>
+        </div>
+      </div>
+      
+    </div>
+  </div> 
+
+  <!-- Link to JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>
